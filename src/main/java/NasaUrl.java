@@ -1,7 +1,7 @@
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-@JsonIgnoreProperties(value = { "date", "explanation", "media_type", "service_version", "title" })
+@JsonIgnoreProperties(value = { "date", "explanation", "media_type", "service_version", "title", "hdurl" })
 public class NasaUrl {
 
     private String url;
