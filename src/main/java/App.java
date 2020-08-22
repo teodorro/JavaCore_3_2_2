@@ -1,5 +1,6 @@
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -41,15 +42,15 @@ public class App {
         HttpGet request = new HttpGet(REMOTE_SERVICE_URI);
         CloseableHttpResponse response = httpClient.execute(request);
         String nasaUrlJson = new String(response.getEntity().getContent().readAllBytes(), StandardCharsets.UTF_8);
-        NasaUrl nasaUrl = null;
+        String nasaUrlStr = null;
         try {
-            nasaUrl = mapper.readValue(nasaUrlJson, NasaUrl.class);
+            ObjectNode node = mapper.readValue(nasaUrlJson, ObjectNode.class);
+            if (node.has("url"))
+                nasaUrlStr = node.get("url").textValue();
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-        if (nasaUrl == null)
-            return null;
-        return nasaUrl.getUrl();
+        return nasaUrlStr;
     }
 
     private static CloseableHttpClient getHttpClient() {
